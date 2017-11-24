@@ -13,6 +13,11 @@
   (interactive)
   (dired "/home/sandric/projects"))
 
+(defun sandric/dired-jump-host ()
+  "Dired jump host directory."
+  (interactive)
+  (dired "/home/sandric/host"))
+
 (defun sandric/dired-jump-rbenv ()
   "Dired jump rbenv directory."
   (interactive)
@@ -27,6 +32,7 @@
   "Dired jump git root directory."
   (interactive)
   (dired (magit-toplevel)))
+
 
 (defun sandric/dired-file-markedp ()
   "Return true if current file is marked."
@@ -86,7 +92,6 @@
          new)
     (if (file-exists-p expanded)
         (error "Cannot create file %s: file exists" expanded))
-    ;; Find the topmost nonexistent parent dir (variable `new')
     (while (and try (not (file-exists-p try)) (not (equal new try)))
       (setq new try
             try (directory-file-name (file-name-directory try))))
@@ -97,237 +102,31 @@
       (dired-add-file new)
       (dired-move-to-filename))))
 
-
-(defun sandric/dired-transfer-to-narrow-symbol ()
-  "Transfer inserted symbol in dired mode to dired-narrow mode."
-  (interactive)
-  (unwind-protect
-      (minibuffer-keyboard-quit)
-    (run-at-time nil nil (lambda ()
-                           (self-insert-command 1)
-                           (dired-narrow--live-update)))
-    (dired-narrow)))
-
-(defun sandric/dired-transfer-to-narrow-latin-symbols ()
-  (loop for c from ?a to ?z
-        do (define-key dired-mode-map (kbd (string c))
-             'sandric/dired-transfer-to-narrow-symbol)))
-
-(defun sandric/dired-transfer-to-narrow-numbers ()
-  (loop for c from ?0 to ?9
-        do (define-key dired-mode-map (kbd (string c))
-             'sandric/dired-transfer-to-narrow-symbol)))
-
-(defun sandric/dired-narrow-execute-function (func &rest arg)
-  "Execute function in dired buffer from narrow."
-  (interactive)
-  (with-current-buffer dired-narrow-buffer
-    (select-window (get-buffer-window (current-buffer)))
-    (let ((result (apply func arg)))
-      (sandric/select-minibuffer)
-      result)))
-
-
-
-(defun sandric/ediff-setup ()
-  (ediff-setup-keymap)
-  (define-key ediff-mode-map (kbd "<down>") 'ediff-next-difference)
-  (define-key ediff-mode-map (kbd "<up>") 'ediff-previous-difference))
-
 (defun sandric/dired-setup ()
+  (define-key dired-mode-map (kbd "<left>") 'dired-jump)
+  (define-key dired-mode-map (kbd "<right>") 'sandric/dired-find-directory)
+
+  (define-key dired-mode-map (kbd "<C-f4> a") 'sandric/dired-kill-buffers)
+
+  (define-key dired-mode-map (kbd "<SPC>") 'sandric/dired-toggle-mark)
+  (define-key dired-mode-map (kbd "A") '(lambda ()
+                                          (interactive)
+                                          (dired-mark-files-regexp "")))
+  (define-key dired-mode-map (kbd "U") 'dired-unmark-all-marks)
+  (define-key dired-mode-map (kbd "M") 'dired-do-move-recursive)
+  (define-key dired-mode-map (kbd "N") 'sandric/dired-create-file)
+  (define-key dired-mode-map (kbd "T") 'dired-create-directory)
+  (define-key dired-mode-map (kbd "D") 'dired-do-delete)
+  (define-key dired-mode-map (kbd "C") 'dired-do-copy)
+
+
+  (require 'wdired)
+  (setq wdired-allow-to-change-permissions t)
+  (define-key dired-mode-map (kbd "<C-f4> w") 'wdired-change-to-wdired-mode)
+  (define-key wdired-mode-map (kbd "<C-f4> r") 'wdired-finish-edit)
+  (define-key wdired-mode-map (kbd "<C-f4> a") 'wdired-abort-changes)
+  
   (hl-line-mode t))
 
 
-(use-package dired
-  :defer t
-  :init (progn
-          (custom-set-variables
-           '(dired-hide-details-hide-information-lines nil)
-           '(diredp-hide-details-initially-flag nil)))
-
-  :config (progn
-
-            (use-package dired+
-              :ensure t
-              :config (progn
-                        (require 'wdired)
-                        (setq wdired-allow-to-change-permissions t)
-
-                        (define-key dired-mode-map (kbd "C-H-w") 'wdired-change-to-wdired-mode)
-                        (define-key wdired-mode-map (kbd "S-C-H-r") 'wdired-finish-edit)
-                        (define-key wdired-mode-map (kbd "S-C-H-a") 'wdired-abort-changes)))
-
-            (use-package dired-narrow
-              :ensure t
-              :config (progn
-                        (require 'dired-narrow)
-
-                        (advice-add 'dired :after #'revert-buffer)
-
-                        (defun dired-narrow--internal (filter-function)
-                          "My narrow internal substitution."
-                          (let ((dired-narrow-buffer (current-buffer))
-                                (dired-narrow-filter-function filter-function)
-                                (disable-narrow nil))
-                            (unwind-protect
-                                (progn
-                                  (dired-narrow-mode 1)
-                                  (add-to-invisibility-spec :dired-narrow)
-                                  (setq disable-narrow (read-from-minibuffer "Filter: " nil dired-narrow-map))
-                                  (unless (dired-utils-goto-line dired-narrow--current-file)
-                                    (setq dired-narrow--current-file nil)))
-                              (dired-narrow-mode -1))))
-
-                        (defun dired-narrow--live-update ()
-                          "My narrow update substitution."
-                          (when dired-narrow-buffer
-                            (let ((current-filter (minibuffer-contents-no-properties)))
-                              (with-current-buffer dired-narrow-buffer
-                                (unless (equal current-filter dired-narrow--minibuffer-content)
-                                  (dired-narrow--update current-filter))
-                                (setq dired-narrow--minibuffer-content current-filter)
-                                (setq dired-narrow--current-file (dired-utils-get-filename))
-                                (set-window-point (get-buffer-window (current-buffer)) (point))
-
-                                (when (bound-and-true-p hl-line-mode)
-                                  (hl-line-highlight))))))))
-
-
-
-            (define-key dired-mode-map "A" '(lambda ()
-                                              (interactive)
-                                              (dired-mark-files-regexp "")))
-
-
-            (define-key dired-narrow-map (kbd "A")
-              '(lambda ()
-                 (interactive)
-                 (sandric/dired-narrow-execute-function
-                  'dired-mark-files-regexp "")))
-
-            (define-key dired-narrow-map (kbd "U")
-              '(lambda ()
-                 (interactive)
-                 (sandric/dired-narrow-execute-function
-                  'dired-unmark-all-marks)))
-
-            (define-key dired-narrow-map (kbd "M")
-              '(lambda ()
-                 (interactive)
-                 (sandric/dired-narrow-execute-function
-                  'sandric/dired-toggle-mark)))
-
-            (define-key dired-narrow-map (kbd "<RET>")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (call-interactively
-                   'sandric/dired-find-file-or-directory))))
-
-            (define-key dired-narrow-map (kbd "L")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (call-interactively
-                   'dired-find-file-other-window))))
-
-            (define-key dired-narrow-map (kbd "Y")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (call-interactively
-                   'dired-find-file))))
-
-            (define-key dired-narrow-map (kbd "N")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (call-interactively
-                   'sandric/dired-create-file))))
-
-            (define-key dired-narrow-map (kbd "T")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (call-interactively
-                   'sandric/switch-to-existing-term-or-create))))
-
-
-            (define-key dired-narrow-map (kbd "S")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (call-interactively
-                   'dired-create-directory))))
-
-            (define-key dired-narrow-map (kbd "D")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (dired-do-delete))))
-
-            (define-key dired-narrow-map (kbd "C")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (dired-do-copy))))
-
-            (define-key dired-narrow-map (kbd "C-H-w")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (revert-buffer)
-                  (wdired-change-to-wdired-mode))))
-
-            (define-key dired-narrow-map (kbd "S-C-H-v")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (sandric/dired-kill-buffers))))
-
-            (define-key dired-narrow-map (kbd "<S-left>")
-              '(lambda ()
-                 (interactive)
-                 (sandric/minibuffer-quit-and-run
-                  (dired-jump))))
-
-            (define-key dired-narrow-map (kbd "<S-right>")
-              '(lambda ()
-                 (interactive)
-                 (when (sandric/dired-narrow-execute-function
-                        'sandric/dired-is-directory)
-                   (sandric/minibuffer-quit-and-run
-                    (call-interactively
-                     'sandric/dired-find-directory)))))
-
-
-            (sandric/dired-transfer-to-narrow-latin-symbols)
-            (sandric/dired-transfer-to-narrow-numbers)
-            (define-key dired-mode-map (kbd ".")
-              'sandric/dired-transfer-to-narrow-symbol))
-
-  :bind (:map dired-mode-map
-              ("N" . dired-narrow)
-              ("M" . sandric/dired-toggle-mark)
-              ("<RET>" . sandric/dired-find-file-or-directory)
-              ("L" . dired-find-file-other-window)
-              ("Y" . dired-find-file)
-              ("T" . sandric/dired-create-file)
-              ("S" . dired-create-directory)
-              ("D" . dired-do-delete)
-              ("C" . dired-do-copy)
-              ("C-g" . revert-buffer)
-              ("s-f" . swiper)
-              ("S-C-H-v" . sandric/dired-kill-buffers)
-              ("<S-left>" . dired-jump)
-              ("<S-right>" . sandric/dired-find-directory)
-              ("M-i" . nil)))
-
-
-
-(add-hook 'ediff-after-quit-hook-internal 'winner-undo)
-(add-hook 'ediff-mode-hook 'sandric/ediff-setup)
-
 (add-hook 'dired-mode-hook 'sandric/dired-setup)
-
-(advice-add 'dired :before 'sandric/select-right-pane)
