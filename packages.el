@@ -1,15 +1,40 @@
+(use-package regex-tool
+  :ensure t
+  :bind (:map regex-tool-mode-map
+              ("<C-f4> a" . regex-tool-quit)))
+
+(use-package w3m
+  :ensure t
+  :defer t
+  :bind (:map w3m-mode-map
+              ("<left>" . nil)
+              ("<right>" . nil)
+              ("<up>" . nil)
+              ("<down>" . nil)
+              ("<C-f4> a" . sandric/w3m-force-quit)))
+
+(use-package emamux
+  :ensure t
+  :defer t)
+
+(use-package command-log-mode
+  :ensure t
+  :defer t)
+
+(use-package xterm-color
+  :ensure t
+  :defer t)
+
 (use-package esup
   :ensure t
   :defer t)
 
-(use-package simpleclip
+(use-package exec-path-from-shell
+  :ensure t)
+
+(use-package nlinum
   :ensure t
-  :defer t
-  :config (progn
-            (simpleclip-mode 1))
-  :bind (("M-6" . simpleclip-copy)
-         ("M-8" . simpleclip-cut)
-         ("M-7" . simpleclip-paste)))
+  :config (progn))
 
 (use-package s
   :ensure t
@@ -22,22 +47,6 @@
 (use-package async
   :ensure t
   :defer t)
-
-(use-package shackle
-  :ensure t
-  :config (progn
-            (setq shackle-rules
-                  '(
-                    (help-mode :custom sandric/shackle-in-right-pane)
-                    ("\\`\\*Customize.*?\\*\\'" :regexp t :custom sandric/shackle-in-right-pane)
-                    (magit-status-mode :custom sandric/shackle-in-right-pane)
-                    ("*Ibuffer*" :align below :ratio 0.3)
-                    (jade-repl-mode :custom sandric/shackle-in-right-pane)
-                    (nodejs-repl-mode :custom sandric/shackle-in-right-pane)
-                    (inf-ruby-mode :custom sandric/shackle-in-right-pane)
-                    (comint-mode :custom sandric/shackle-in-right-pane)
-                    ))
-            (shackle-mode t)))
 
 (use-package auto-compile
   :ensure t
@@ -92,21 +101,19 @@
             (setq undo-tree-mode-lighter " Undo-Tree")
             (global-undo-tree-mode))
   :bind (("C-z" . undo-tree-undo)
-         ("" . undo-tree-visualize)
+         ("<C-f3> w" . undo-tree-visualize)
          ("C-y" . undo-tree-redo)))
-
-(use-package expand-region
-  :ensure t
-  :bind (("C-S-s-t" . er/expand-region)
-         ("s-Y" . er/contract-region)))
 
 (use-package multiple-cursors
   :ensure t
   :config (progn
             (setq mc/always-run-for-all t)
             )
-  :bind (("C-H-e" . mc/mark-next-like-this)
-         ("C-H-u" . mc/unmark-next-like-this)))
+  :bind (("<C-f2> s" . mc/mark-next-like-this)
+         ("<C-f2> f" . mc/unmark-next-like-this)
+         ("<C-f2> a" . mc/mark-all-like-this)
+         :map mc/keymap
+         ("ESC ESC ESC" . mc/keyboard-quit)))
 
 (use-package smartparens
   :ensure t
@@ -114,3 +121,17 @@
 
 (use-package zygospore
   :ensure t)
+
+(use-package markdown-mode
+  :ensure t)
+
+(use-package sx
+  :ensure t
+  :config (progn
+            (add-hook 'sx-question-list-mode
+                      (lambda () (setq header-line-format nil))))
+  :bind (:map sx-question-mode-map
+              ("<left>" . nil)
+              ("<right>" . nil)
+              ("<up>" . previous-line)
+              ("<down>" . next-line)))

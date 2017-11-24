@@ -1,5 +1,5 @@
 (defface mode-line-modified
-  '((t :weight bold :foreground "red"))
+  '((t :weight bold :foreground "white" :background "red"))
   ""
   :group 'modeline-faces)
 
@@ -82,62 +82,36 @@ can be used to add a number of spaces to the front and back of the string."
    (list
     " "
     '(:eval (if (buffer-modified-p)
-                (propertize "* "
+                (propertize "M"
                             'face
                             'mode-line-modified)
-              (propertize "* "
+              (propertize "S "
                           'face
                           'mode-line-not-modified)))
     " "
     (propertize "%l" 'face 'bold)
     ":"
     (propertize "%c" 'face 'italic)
-    '(:eval (format " %d" (point))))))
+    " "
+    (format "%3d%%" (/ (window-end) 0.01 (point-max))))))
 
 (defun sandric/mode-line-center ()
   "Mode line format for center margin"
   (format-mode-line
    (list
-    (propertize "🚀 " 'face 'mode-line-rocket)
-    (if (string= "term-mode" major-mode)
-        (mapcar (lambda (buffer)
-                  (if (eq buffer (current-buffer))
-                      (propertize (s-wrap (buffer-name buffer) " ")
-                                  'face
-                                  'mode-line-term-active)
-                    (propertize (s-wrap (buffer-name buffer) " ")
-                                'face
-                                'mode-line-term-inactive)))
-                multi-term-buffer-list)
-      (sandric/flycheck-mode-line-status-text))
-
-    (if (string= "termedit-mode" major-mode)
-        (mapcar (lambda (buffer)
-                  (if (string= (buffer-name buffer) (termedit/get-term-name))
-                      (if (term-in-line-mode)
-                          (propertize (s-wrap (buffer-name buffer) " ")
-                                      'face
-                                      'mode-line-term-active-line)
-                        (propertize (s-wrap (buffer-name buffer) " ")
-                                    'face
-                                    'mode-line-term-active))
-                    (propertize (s-wrap (buffer-name buffer) " ")
-                                'face
-                                'mode-line-term-inactive)))
-                multi-term-buffer-list)
-      (sandric/flycheck-mode-line-status-text))
-
-    (propertize " 🚀" 'face 'mode-line-rocket))))
+    (propertize "* " 'face 'mode-line-rocket)
+    (propertize "%b")
+    (propertize " *" 'face 'mode-line-rocket))))
 
 (defun sandric/mode-line-right ()
   "Mode line format for right margin"
   (format-mode-line
    (list
-    (propertize " 🚀" 'face 'mode-line-rocket)
+    (propertize "* " 'face 'mode-line-rocket)
+    (propertize "%m")
+    (propertize " *" 'face 'mode-line-rocket)
     minor-mode-alist
-    (propertize " 🚀 " 'face 'mode-line-rocket)
-
-    (propertize "[%m]" 'face 'bold))))
+    (propertize " *" 'face 'mode-line-rocket))))
 
 (setq-default mode-line-format
               '((:eval (sandric/modeline-render
@@ -147,22 +121,30 @@ can be used to add a number of spaces to the front and back of the string."
                         1 1))))
 
 (defvar mode-line-cleaner-alist
-  `((smartparens-mode . " ()")
+  `((smartparens-mode . "")
+    (global-undo-tree-mode . "")
+    (undo-tree-mode . "")
+    (undo-tree-minor-mode . "")
+    (whitespace-mode . "")
+    (flycheck-mode . " f")
     (eldoc-mode . "")
+    (hi-lock-mode . "")
+    (highlight-symbol-mode . "")
+    (auto-revert-mode . "")
+
+    (tern-mode . " t")
+    (emmet-mode . " e")
     (company-mode . " c")
     (yas-minor-mode . " γσ")
-    (global-undo-tree-mode . " ψ")
-    (undo-tree-mode . " ψ")
-    (undo-tree-minor-mode . " ψ")
-    (whitespace-mode . " $")
-    (flycheck-mode . "")
     (aggressive-indent-mode . " αι")
+    (robe-mode . " r")
 
-    ;; Major modes
     (lisp-interaction-mode . "λ")
-    (hi-lock-mode . "")
     (python-mode . "Py")
     (emacs-lisp-mode . "ελ")
+    (ruby-mode . "R")
+    (java-script-mode . "JS")
+    (js-mode . "JS")
     (nxhtml-mode . "nx")))
 
 (defun clean-mode-line ()
