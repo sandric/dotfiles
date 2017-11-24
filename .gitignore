@@ -1,2 +1,8 @@
 \#*\#
 /elpa/
+.mc-lists.el
+.sx
+magithub
+network-security.data
+
+.tern-port
