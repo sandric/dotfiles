@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: function
+# key: m
+# --
+def $1
+  $0
+end
