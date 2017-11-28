@@ -1,3 +1,6 @@
+(use-package multi-term
+  :ensure t)
+
 (use-package regex-tool
   :ensure t
   :bind (:map regex-tool-mode-map

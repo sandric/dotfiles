@@ -6,7 +6,9 @@
         ((string= major-mode "ruby-mode")
          (call-interactively 'robe-doc arg))
         ((string= major-mode "js-mode")
-         (call-interactively 'sandric/counsel-dash-at-point arg))))
+         (call-interactively 'sandric/counsel-dash-at-point arg))
+        ((string= major-mode "term-mode")
+         (call-interactively 'sandric/term-man arg))))
 
 (defun sandric/hydra-interact-definition (arg)
   "Hydra interact definition."
@@ -16,7 +18,9 @@
         ((string= major-mode "ruby-mode")
          (call-interactively 'robe-jump arg))
         ((string= major-mode "js-mode")
-         (call-interactively 'tern-find-definition arg))))
+         (call-interactively 'tern-find-definition arg))
+        ((string= major-mode "term-mode")
+         (call-interactively 'sandric/term-which arg))))
 
 (defun sandric/hydra-interact-scratch (arg)
   "Hydra interact scratch."

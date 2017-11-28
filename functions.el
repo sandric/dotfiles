@@ -194,6 +194,11 @@
           (with-current-buffer buffer (wgrep-set-readonly-area nil)))
         (buffer-list)))
 
+(defun sandric/get-major-mode ()
+  "Print major mode name."
+  (interactive)
+  (print major-mode))
+
 (defun sandric/kill-buffers-by-major-mode (mode-name)
   "Kill open buffers by major mode name."
   (interactive)
@@ -299,17 +304,19 @@
 
 (defun sandric/select-word-left ()
   "Select word left."
-  (interactuive)
+  (interactive)
   (when (not (region-active-p))
     (push-mark (point) t t))
-  (backward-word))
+  (backward-word)
+  (setq transient-mark-mode  (cons 'only transient-mark-mode)))
 
 (defun sandric/select-word-right ()
   "Select word right."
   (interactive)
   (when (not (region-active-p))
     (push-mark (point) t t))
-  (forward-word))
+  (forward-word)
+  (setq transient-mark-mode  (cons 'only transient-mark-mode)))
 
 (defun sandric/select-symbol-under-cursor ()
   "Select symbol under cursor."

@@ -26,9 +26,8 @@
 (load (expand-file-name "complete.el" user-emacs-directory))
 (load (expand-file-name "prog.el" user-emacs-directory))
 (load (expand-file-name "search.el" user-emacs-directory))
-
 (load (expand-file-name "dired.el" user-emacs-directory))
-
+(load (expand-file-name "term.el" user-emacs-directory))
 (load (expand-file-name "modeline.el" user-emacs-directory))
 
 (custom-set-variables
@@ -44,7 +43,7 @@
  '(display-buffer-base-action (quote (display-buffer-reuse-window (reusable-frames . t))))
  '(package-selected-packages
    (quote
-    (projectile-rails fish-mode github-clone gh magithub regex-tool w3m wgrep-ag ruby-electric coffee-mode rjsx-mode company-tern emamux emacs-emamux command-log-mode xterm-color company-web exec-path-from-shell indium cyrillic-ukrainian markdown-mode sx key-chord nodejs-repl tern yaml-mode scss-mode emmet-mode web-mode robe inf-ruby rubocop restclient flycheck evil-nerd-commenter company yasnippet git-gutter+ magit org-bullets fzf zygospore smartparens multiple-cursors expand-region aggressive-indent window-numbering highlight-symbol circe auto-compile shackle f s simpleclip esup counsel-dash wgrep counsel smex swiper ivy rainbow-delimiters rainbow-delimiter undo-tree rainbow-mode solarized-theme)))
+    (multi-term projectile-rails fish-mode github-clone gh magithub regex-tool w3m wgrep-ag ruby-electric coffee-mode rjsx-mode company-tern emamux emacs-emamux command-log-mode xterm-color company-web exec-path-from-shell indium cyrillic-ukrainian markdown-mode sx key-chord nodejs-repl tern yaml-mode scss-mode emmet-mode web-mode robe inf-ruby rubocop restclient flycheck evil-nerd-commenter company yasnippet git-gutter+ magit org-bullets fzf zygospore smartparens multiple-cursors expand-region aggressive-indent window-numbering highlight-symbol circe auto-compile shackle f s simpleclip esup counsel-dash wgrep counsel smex swiper ivy rainbow-delimiters rainbow-delimiter undo-tree rainbow-mode solarized-theme)))
  '(send-mail-function (quote smtpmail-send-it))
  '(w3m-use-header-line nil))
 (custom-set-faces

@@ -1,5 +1,33 @@
 (require 'cl)
 
+(defun sandric/title-major-mode ()
+  "Major mode to be displayed in window title."
+  (if (string= major-mode "term-mode")
+      (if (term-in-char-mode)
+          "term-char-mode"
+        "term-line-mode")
+    (symbol-name major-mode)))
+
+(defun sandric/title-update ()
+  "Update window title."
+  
+  (send-string-to-terminal (concat
+                            "\033]0; emacs "
+                            (sandric/title-major-mode)
+                            " "
+                            (buffer-name)
+                            "\007")))
+
+(add-hook 'buffer-list-update-hook 'sandric/title-update)
+
+(add-hook 'dired-after-readin-hook
+          (lambda ()
+            ;; Set name of dired buffers to absolute directory name.
+            ;; Use `generate-new-buffer-name' for vc-directory
+            ;; which creates duplicate buffers.
+            (rename-buffer (generate-new-buffer-name dired-directory))))
+
+
 (setq load-prefer-newer t)
 
 
@@ -57,6 +85,19 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (setq-default tab-width 2)
+
+
+(defun sandric/term-char-mode ()
+  "Switch to char (\"raw\") sub-mode of term mode.
+Each character you type is sent directly to the inferior without
+intervention from Emacs, except for the escape character (usually C-c)."
+  (interactive)
+  (setq term-old-mode-map (current-local-map))
+  (use-local-map term-raw-map)
+  ;; (sandric/term-delete-current-command)
+  ;; (easy-menu-add term-terminal-menu)
+  ;; (easy-mrenu-add term-signals-menu)
+  )
 
 (setq split-height-threshold 5000)
 (setq split-width-threshold 5000)
@@ -169,12 +210,3 @@
   (global-set-key (kbd "<xterm-paste>") 'sandric/clipboard-paste))
 
 (add-hook 'prog-mode-hook 'xterm-clipboard-mode)
-
-
-;; (defun sandric/on-emacs-get-focus ()
-;;   "On emacs frame getting focus."
-;;   (shell-command-to-string "tmux_set_name \"lala\"")
-;;   )
-
-;; (add-hook 'focus-in-hook 'xterm-clipboard-mode)
-

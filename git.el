@@ -29,8 +29,7 @@
               ("M-n" . nil)
 
               :map magit-blame-mode-map
-              ("C-g" . magit-blame-quit))
-  )
+              ("C-g" . magit-blame-quit)))
 
 (use-package magithub
   :ensure t

@@ -23,7 +23,7 @@
   ""
   :group 'modeline-faces)
 
-(defface mode-line-term-active-line
+(defface mode-line-term-active-line-mode
   '((t :weight bold :foreground "white" :background "red"))
   ""
   :group 'modeline-faces)
@@ -76,6 +76,23 @@ can be used to add a number of spaces to the front and back of the string."
     (`suspicious "?")))
 
 
+(defun sandric/term-list-names ()
+  "."
+  (interactive)
+  (mapcar (lambda (buffer)
+            (if (string= (buffer-name) (buffer-name buffer))
+                (if (term-in-line-mode)
+                    (propertize (s-wrap (sandric/term-format-name (buffer-name buffer)) " ")
+                                'face
+                                'mode-line-term-active-line-mode)
+                  (propertize (s-wrap (sandric/term-format-name (buffer-name buffer)) " ")
+                              'face
+                              'mode-line-term-active))
+              (propertize (s-wrap (sandric/term-format-name (buffer-name buffer)) " ")
+                          'face
+                          'mode-line-term-inactive)))
+          multi-term-buffer-list))
+
 (defun sandric/mode-line-left ()
   "Mode line format for left margin"
   (format-mode-line
@@ -100,7 +117,11 @@ can be used to add a number of spaces to the front and back of the string."
   (format-mode-line
    (list
     (propertize "* " 'face 'mode-line-rocket)
-    (propertize "%b")
+
+    '(:eval (if (string= "term-mode" major-mode)
+                (sandric/term-list-names)
+              (propertize "%b")))
+    
     (propertize " *" 'face 'mode-line-rocket))))
 
 (defun sandric/mode-line-right ()
@@ -145,7 +166,8 @@ can be used to add a number of spaces to the front and back of the string."
     (ruby-mode . "R")
     (java-script-mode . "JS")
     (js-mode . "JS")
-    (nxhtml-mode . "nx")))
+    (nxhtml-mode . "nx")
+    (term-mode . "T")))
 
 (defun clean-mode-line ()
   (interactive)
