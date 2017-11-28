@@ -1,4 +1,5 @@
-﻿#SingleInstance force
+﻿SetTitleMatchMode, Regex
+#SingleInstance force
 
 Pause::Reload
 
@@ -342,77 +343,11 @@ return
 
 
 
-#IfWinActive tmux htop
-
-<^f::
-	Send {\}
-return
-
->^+a::
-	Send q
-return
-
-<^+n::
-	Send <
-  Send {up}
-  Send {enter}
-return
-
-<^+i::
-	Send <
-  Send {down}
-  Send {enter}
-return
-
-#IfWinActive
-
-
-#IfWinActive tmux emacs
+#IfWinActive emacs
 
 >^q::
 	Send ^g
 return
-
-#IfWinActive
-
-
-#IfWinActive tmux fish
-
-<^f::
-	Send {f5} 
-return
-
-<^+h::
-  Send {f6} 
-return
-
-<^+l::
-	Send l{enter}
-return
-
-<^+u::
-  Send h{enter}
-return
-
-<^+e::
-  Send e {f5}
-return
-
->^+a::
-	Send exit{enter}
-return
-
->^+v::
-	Send d{enter}
-return
-
-#IfWinActive
-
-
-
-
-
-#IfWinActive ahk_class mintty
 
 <^t::
 	Send +{insert}
@@ -467,7 +402,6 @@ return
 return
 
 
-
 <^+f::
 	Send ^{f3}f
 return
@@ -479,7 +413,6 @@ return
 <^+s::
 	Send ^{f3}s
 return
-
 
 
 >^+q::
@@ -554,6 +487,15 @@ return
 	Send ^{f4}y
 return
 
+
+<!+l::
+	Send ^{f5}l
+return
+
+<!+y::
+	Send ^{f5}y
+return
+
 #IfWinActive
 
 
@@ -616,7 +558,6 @@ return
 
 
 
-
 >!a::
 	Send {'}
 return
@@ -642,3 +583,30 @@ return
   Send ^{F4}q
   SendInput indium-connect-to-chrome{enter}
 return
+
+
+#IfWinActive ahk_class SDL_app
+
+<^s::
+	Send p12
+return
+
+<^t::
+	Send p21
+return
+
+y::
+	SendInput ^{Space}
+return
+
+state:=0
+
+$c::
+  state:= !state
+   if state
+  Send {TAB down}
+  else
+  Send {TAB Up}
+return
+
+#IfWinActive
