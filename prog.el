@@ -22,10 +22,6 @@
   :ensure t
   :bind (("C-<f2> c" . evilnc-comment-or-uncomment-lines)))
 
-(use-package evil-nerd-commenter
-  :ensure t
-  :bind (("C-<f2> c" . evilnc-comment-or-uncomment-lines)))
-
 (use-package flycheck
   :ensure t
   :defer t
@@ -49,12 +45,12 @@
 (use-package emmet-mode
   :ensure t
   :defer t
-  :config (progn (require 'emmet-mode)
-                 (add-hook 'sgml-mode-hook 'emmet-mode)
-                 (add-hook 'html-mode-hook 'emmet-mode)
-                 (add-hook 'css-mode-hook  'emmet-mode)
+  :init (progn (require 'emmet-mode)
+               (add-hook 'sgml-mode-hook 'emmet-mode)
+               (add-hook 'html-mode-hook 'emmet-mode)
+               (add-hook 'css-mode-hook  'emmet-mode)
 
-                 (define-key emmet-mode-keymap (kbd "TAB") 'emmet-expand-line)))
+               (define-key emmet-mode-keymap (kbd "TAB") 'emmet-expand-line)))
 
 (use-package rubocop
   :ensure t)
@@ -115,6 +111,18 @@
   :init (progn (add-hook 'js-mode-hook 'tern-mode))
   :commands (tern-mode))
 
-;; (use-package nodejs-repl
-;;   :ensure t
-;;   :defer t)
+(use-package alchemist
+  :ensure t
+  :config (progn
+            (key-chord-define alchemist-mode-map "NN" 'sandric/alchemist-struct)
+            (key-chord-define alchemist-mode-map "TT" 'sandric/alchemist-pipe)
+
+            (setq alchemist-goto-elixir-source-dir "/home/sandric/elixir"))
+  :bind (:map alchemist-mode-map
+              ("C-<f2> r" . alchemist-iex-send-region-and-go)))
+
+(use-package vue-mode
+  :ensure t)
+
+(use-package lua-mode
+  :ensure t)

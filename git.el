@@ -5,10 +5,7 @@
             (setq ediff-window-setup-function 'ediff-setup-windows-plain)
             (setq ediff-window-setup-function 'ediff-setup-windows-plain)
             (setq ediff-diff-options "-w")
-            (setq ediff-split-window-function 'split-window-horizontally)
-            (setq magit-display-buffer-function
-                  (lambda (buffer)
-                    (display-buffer buffer '(display-buffer-same-window)))))
+            (setq ediff-split-window-function 'split-window-horizontally))
 
   :bind (:map with-editor-mode-map
               ("<C-f4> r" . with-editor-finish)

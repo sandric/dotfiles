@@ -8,7 +8,9 @@
         ((string= major-mode "js-mode")
          (call-interactively 'sandric/counsel-dash-at-point arg))
         ((string= major-mode "term-mode")
-         (call-interactively 'sandric/term-man arg))))
+         (call-interactively 'sandric/term-man arg))
+        ((string= major-mode "elixir-mode")
+         (call-interactively 'alchemist-help-search-at-point arg))))
 
 (defun sandric/hydra-interact-definition (arg)
   "Hydra interact definition."
@@ -20,7 +22,9 @@
         ((string= major-mode "js-mode")
          (call-interactively 'tern-find-definition arg))
         ((string= major-mode "term-mode")
-         (call-interactively 'sandric/term-which arg))))
+         (call-interactively 'sandric/term-which arg))
+        ((string= major-mode "elixir-mode")
+         (call-interactively 'alchemist-goto-definition-at-point arg))))
 
 (defun sandric/hydra-interact-scratch (arg)
   "Hydra interact scratch."
@@ -48,6 +52,8 @@
 (use-package hydra
   :ensure t
   :config (progn
+            (setq hydra-lv nil)
+            
             (defhydra hydra-interact (:exit t)
               "Interact"
               ("<C-f4> n" sandric/hydra-interact-definition "definition")

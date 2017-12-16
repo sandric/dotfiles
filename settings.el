@@ -30,9 +30,7 @@
 
 (setq load-prefer-newer t)
 
-
 (menu-bar-mode -1)
-
 
 (setq x-select-enable-primary t)
 (setq select-enable-primary t)
@@ -85,6 +83,8 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (setq-default tab-width 2)
+(set (make-local-variable 'sgml-basic-offset) 2)
+(setq css-indent-offset 2)
 
 
 (defun sandric/term-char-mode ()
@@ -99,8 +99,8 @@ intervention from Emacs, except for the escape character (usually C-c)."
   ;; (easy-mrenu-add term-signals-menu)
   )
 
-(setq split-height-threshold 5000)
-(setq split-width-threshold 5000)
+;; (setq split-height-threshold 5000)
+;; (setq split-width-threshold 5000)
 
 
 (add-to-list 'display-buffer-alist
@@ -192,19 +192,13 @@ intervention from Emacs, except for the escape character (usually C-c)."
  ("Yi" ?Ї) ("YI" ?Ї))
 
 
-(defun cua-copy-region (arg)
-  "Copy region to tmp clip."
-  (interactive "P")
+(defadvice cua-copy-region (before copy-xterm-clipboard activate)
   (if (use-region-p)
       (write-region (region-beginning) (region-end) "~/host/tmp/clipboard" t)))
 
-(defun cua-cut-region (arg)
-  "Cut region to tmp clip."
-  (interactive "P")
+(defadvice cua-cut-region (before copy-xterm-clipboard activate)
   (if (use-region-p)
-      (progn
-        (write-region (region-beginning) (region-end) "~/host/tmp/clipboard" t)
-        (delete-region (region-beginning) (region-end)))))
+      (write-region (region-beginning) (region-end) "~/host/tmp/clipboard" t)))
 
 (define-minor-mode xterm-clipboard-mode
   (global-set-key (kbd "<xterm-paste>") 'sandric/clipboard-paste))

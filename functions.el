@@ -1,132 +1,40 @@
-(defun sandric/tmux-select-left-pane ()
-  "Select left tmux pane."
+(defun sandric/alchemist-struct ()
+  "Insert %{} and place cursor after first char."
   (interactive)
-  (shell-command "tmux select-window -t 0; tmux select-pane -t 0"))
 
-(defun sandric/tmux-select-right-pane ()
-  "Select right tmux pane."
+  (insert "%{}")
+  (backward-char 2))
+
+(defun sandric/alchemist-pipe ()
+  "Insert |> and newline."
   (interactive)
-  (shell-command "tmux select-window -t 0; tmux select-pane -t 1"))
 
-(defun sandric/is-left-frame ()
-  "Is current frame is left."
+  (call-interactively 'newline)
+  (insert "|> "))
+
+(defun sandric/switch-to-previous-buffer ()
+  "Switching to previously used buffer."
   (interactive)
-  (equal "leftframe" (frame-parameter (selected-frame) 'name)))
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
 
-(defun sandric/is-right-frame ()
-  "Is current frame is right."
+(defun sandric/select-left-pane ()
+  "Select right pane window."
   (interactive)
-  (equal "rightframe" (frame-parameter (selected-frame) 'name)))
+  (select-window-1))
 
-(defun sandric/is-window-in-right-pane ()
-  "Check if window is in right pane."
+(defun sandric/select-right-pane ()
+  "Select right pane window."
   (interactive)
-  (eq (window-numbering-get-number) 2))
+  (select-window-2))
 
-(defun sandric/get-frame-by-name (fname)
-  "If there is a frame named FNAME, return it, else nil."
+(defun sandric/open-buffer-other-pane ()
+  "Open current buffer in other pane window."
   (interactive)
-  (require 'dash)
-  (-some (lambda (frame)
-           (when (equal fname (frame-parameter frame 'name))
-             frame))
-         (frame-list)))
+  (let ((buffer (current-buffer)))
+    (other-window 1)
+    (switch-to-buffer buffer)))
 
-(defun sandric/select-frame-by-name (fname)
-  "Select frame by name."
-  (interactive)
-  (select-frame (sandric/get-frame-by-name fname)))
-
-(defun sandric/select-left-frame ()
-  "Select left frame."
-  (interactive)
-  (sandric/select-frame-by-name "leftframe")
-  (sandric/tmux-select-left-pane))
-
-(defun sandric/select-right-frame ()
-  "Select right frame."
-  (interactive)
-  (sandric/select-frame-by-name "rightframe")
-  (sandric/tmux-select-right-pane))
-
-(defun sandric/select-other-frame ()
-  "Select other frame."
-  (interactive)
-  (if (sandric/is-left-frame)
-      (sandric/select-right-frame)
-    (sandric/select-left-frame)))
-
-(defun sandric/open-buffer-in-left-frame (buffer)
-  "Open buffer in left frame."
-  (interactive)
-  (sandric/select-left-frame)
-  (switch-to-buffer buffer))
-
-(defun sandric/open-buffer-in-right-frame (buffer)
-  "Open buffer in right frame."
-  (interactive)
-  (sandric/select-right-frame)
-  (switch-to-buffer buffer))
-
-(defun sandric/open-buffer-in-other-frame (buffer)
-  "Open buffer in other frame."
-  (interactive)
-  (sandric/select-other-frame)
-  (switch-to-buffer buffer))
-
-(defun sandric/open-current-buffer-in-left-frame ()
-  "Open current buffer in left frame."
-  (interactive)
-  (sandric/open-buffer-in-left-frame (current-buffer)))
-
-(defun sandric/open-current-buffer-in-right-frame ()
-  "Open current buffer in right frame."
-  (interactive)
-  (sandric/open-buffer-in-right-frame (current-buffer)))
-
-(defun sandric/open-current-buffer-in-other-frame ()
-  "Open current buffer in other frame."
-  (interactive)
-  (sandric/open-buffer-in-other-frame (current-buffer)))
-
-(defun sandric/tmux-man (entry)
-  "Open manpage in right pane."
-  (suspend-frame)
-  (sandric/select-right-frame)
-  (man entry))
-
-(defun sandric/tmux-history ()
-  "Open tmux history file."
-  (suspend-frame)
-  (sandric/select-right-frame)
-  (find-file "/home/sandric/.tmux_history")
-  (end-of-buffer))
-
-(defun sandric/tmux-dired (pwd)
-  "Open tmux dired file."
-  (suspend-frame)
-  (sandric/select-right-frame)
-  (dired pwd))
-
-(defun sandric/tmux-rg (pwd)
-  "Open tmux history file."
-  (sandric/tmux-dired pwd)
-  (counsel-rg))
-
-(defun sandric/chrome-console (http)
-  "Connect to chrome tab console window."
-  (indium-chrome--get-tabs-data "10.0.2.2" "9222" #'indium-chrome--connect-to-tab))
-
-
-
-(defun sandric/kill-buffer-and-delete-splitted-window ()
-  "Close current buffer and delete window if splitted."
-  (interactive)
-  (when (> (count-windows) 1)
-    (select-window-2))
-  (kill-this-buffer)
-  (select-window-1)
-  (delete-other-windows))
+(setq x-select-enable-clipboard nil)
 
 (defun sandric/swiper-or-region (beg end)
   "Swiper region or 'empty string' if none highlighted."
@@ -151,6 +59,7 @@
   (interactive)
   (counsel-dash (thing-at-point 'symbol)))
 
+
 (defun sandric/w3m-force-quit ()
   "Force quit from w3m buffer."
   (interactive)
@@ -174,8 +83,6 @@
   (if (sandric/is-left-frame)
       (sandric/select-right-frame))
   (magit-status))
-
-
 
 
 (defmacro sandric/minibuffer-quit-and-run (&rest body)
@@ -358,4 +265,9 @@
 (defun sandric/translit ()
   "Print point position in bytes"
   (interactive)
-  (set-input-method (cyrillic-translit "ukrainian")))
+  (sandric/new-empty-buffer)
+  (set-input-method 'cyrillic-translit))
+
+(defun sandric/chrome-console (http)
+  "Connect to chrome tab console window."
+  (indium-chrome--get-tabs-data "10.0.2.2" "9222" #'indium-chrome--connect-to-tab))

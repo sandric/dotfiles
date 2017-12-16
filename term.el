@@ -225,6 +225,16 @@
   (sandric/rg-or-region beg end (sandric/term-getenv "PWD")))
 
 
+(defun sandric/term-prev-tty ()
+  "Select previous term tty."
+  (interactive)
+  (multi-term-prev))
+
+(defun sandric/term-next-tty ()
+  "Select previous term tty."
+  (interactive)
+  (multi-term-next))
+
 
 (defun term-exec-1 (name buffer command switches)
   ;; We need to do an extra (fork-less) exec to run stty.
@@ -304,7 +314,7 @@ if [ $1 = .. ]; then shift; fi; exec \"$@\""
 
 (eval-after-load "term" '(progn
                            (define-key term-mode-map (kbd "C-g")
-                             'sandric/term-interrupt)
+                             'sandric/term-switch-char-mode)
                            (define-key term-mode-map (kbd "RET")
                              'sandric/term-send-input)
 
@@ -339,9 +349,10 @@ if [ $1 = .. ]; then shift; fi; exec \"$@\""
                            (define-key term-raw-map (kbd "<C-f3> t")
                              'sandric/term-switch-line-mode-symbol)
 
-                           (define-key sandric-right-alt-shift-map (kbd "l") 'multi-term-prev)
-                           (define-key sandric-right-alt-shift-map (kbd "y") 'multi-term-next)
-
+                           (define-key sandric-left-alt-shift-map (kbd "l")
+                             'sandric/term-prev-tty)
+                           (define-key sandric-left-alt-shift-map (kbd "y")
+                             'sandric/term-next-tty)
                            ))
 
 

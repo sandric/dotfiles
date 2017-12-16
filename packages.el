@@ -110,8 +110,9 @@
 (use-package multiple-cursors
   :ensure t
   :config (progn
-            (setq mc/always-run-for-all t)
-            )
+            (setq mc/always-run-for-all 1)
+            (setq mc/always-repeat-command t))
+  
   :bind (("<C-f2> s" . mc/mark-next-like-this)
          ("<C-f2> f" . mc/unmark-next-like-this)
          ("<C-f2> a" . mc/mark-all-like-this)

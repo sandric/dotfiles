@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Function
+# key: m
+# --
+def ($1) when $2 do
+  $0
+end
