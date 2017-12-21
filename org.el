@@ -1,6 +1,4 @@
-
 (use-package org-bullets
-  ;; :defer t
   :ensure t)
 
 (defun sandric/org-mode-setup ()

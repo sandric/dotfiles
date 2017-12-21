@@ -1,3 +1,6 @@
+(use-package dired-toggle-sudo
+  :ensure t)
+
 (defun sandric/dired-jump-home ()
   "Dired jump home directory."
   (interactive)
@@ -106,7 +109,7 @@
   (define-key dired-mode-map (kbd "<left>") 'dired-jump)
   (define-key dired-mode-map (kbd "<right>") 'sandric/dired-find-directory)
 
-  (define-key dired-mode-map (kbd "<C-f4> a") 'sandric/dired-kill-buffers)
+  (define-key dired-mode-map (kbd "M-A") 'sandric/dired-kill-buffers)
 
   (define-key dired-mode-map (kbd "<SPC>") 'sandric/dired-toggle-mark)
   (define-key dired-mode-map (kbd "A") '(lambda ()
@@ -122,11 +125,20 @@
 
   (require 'wdired)
   (setq wdired-allow-to-change-permissions t)
-  (define-key dired-mode-map (kbd "<C-f4> w") 'wdired-change-to-wdired-mode)
-  (define-key wdired-mode-map (kbd "<C-f4> r") 'wdired-finish-edit)
-  (define-key wdired-mode-map (kbd "<C-f4> a") 'wdired-abort-changes)
+  (define-key dired-mode-map (kbd "M-W") 'wdired-change-to-wdired-mode)
+  (define-key wdired-mode-map (kbd "M-R") 'wdired-finish-edit)
+  (define-key wdired-mode-map (kbd "M-A") 'wdired-abort-changes)
   
   (hl-line-mode t))
+
+
+(require 'dired-toggle-sudo)
+(define-key dired-mode-map (kbd "C-c C-s") 'dired-toggle-sudo)
+(eval-after-load 'tramp
+  '(progn
+     ;; Allow to use: /sudo:user@host:/path/to/file
+     (add-to-list 'tramp-default-proxies-alist
+                  '(".*" "\\`.+\\'" "/ssh:%h:"))))
 
 
 (add-hook 'dired-mode-hook 'sandric/dired-setup)

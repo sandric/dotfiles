@@ -20,7 +20,7 @@
 
 (use-package evil-nerd-commenter
   :ensure t
-  :bind (("C-<f2> c" . evilnc-comment-or-uncomment-lines)))
+  :bind (("M-c" . evilnc-comment-or-uncomment-lines)))
 
 (use-package flycheck
   :ensure t
@@ -93,7 +93,7 @@
   :init (progn
           (setq exec-path (cons
                            (expand-file-name
-                            "/Users/sandric/.rbenv/shims/sass")
+                            "/home/sandric/.rbenv/shims/sass")
                            exec-path))))
 
 (use-package yaml-mode
@@ -119,10 +119,12 @@
 
             (setq alchemist-goto-elixir-source-dir "/home/sandric/elixir"))
   :bind (:map alchemist-mode-map
-              ("C-<f2> r" . alchemist-iex-send-region-and-go)))
+              ("M-r" . alchemist-iex-send-region-and-go)))
 
 (use-package vue-mode
   :ensure t)
 
 (use-package lua-mode
-  :ensure t)
+  :ensure t
+  :config (progn
+            (setq lua-indent-level 2)))

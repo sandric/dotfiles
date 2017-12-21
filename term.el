@@ -322,9 +322,9 @@ if [ $1 = .. ]; then shift; fi; exec \"$@\""
                              'sandric/term-interrupt)
                            
 
-                           (define-key term-raw-map (kbd "<C-left>")
+                           (define-key term-raw-map (kbd "C-h")
                              'sandric/term-move-word-left)
-                           (define-key term-raw-map (kbd "<C-right>")
+                           (define-key term-raw-map (kbd "C-o")
                              'sandric/term-move-word-right)
 
                            (define-key term-raw-map [S-left]
@@ -346,13 +346,13 @@ if [ $1 = .. ]; then shift; fi; exec \"$@\""
                            (define-key term-raw-map [S-end]
                              'sandric/term-switch-line-mode-end)
 
-                           (define-key term-raw-map (kbd "<C-f3> t")
+                           (define-key term-raw-map (kbd "M-T")
                              'sandric/term-switch-line-mode-symbol)
 
-                           (define-key sandric-left-alt-shift-map (kbd "l")
-                             'sandric/term-prev-tty)
-                           (define-key sandric-left-alt-shift-map (kbd "y")
-                             'sandric/term-next-tty)
+                           ;; (define-key sandric-left-alt-shift-map (kbd "l")
+                           ;;   'sandric/term-prev-tty)
+                           ;; (define-key sandric-left-alt-shift-map (kbd "y")
+                           ;;   'sandric/term-next-tty)
                            ))
 
 

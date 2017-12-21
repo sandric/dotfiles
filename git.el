@@ -8,22 +8,12 @@
             (setq ediff-split-window-function 'split-window-horizontally))
 
   :bind (:map with-editor-mode-map
-              ("<C-f4> r" . with-editor-finish)
-              ("<C-f4> a" . with-editor-cancel)
+              ("M-R" . with-editor-finish)
+              ("M-A" . with-editor-cancel)
 
               :map magit-status-mode-map
               ("p" . magit-push-popup)
-              ("M-n" . nil)
-              ("<C-f2> r" . magit-refresh)
-
-              :map magit-log-mode-map
-              ("M-n" . nil)
-
-              :map magit-revision-mode-map
-              ("M-n" . nil)
-
-              :map git-commit-mode-map
-              ("M-n" . nil)
+              ("M-r" . magit-refresh)
 
               :map magit-blame-mode-map
               ("C-g" . magit-blame-quit)))

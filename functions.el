@@ -1,3 +1,16 @@
+(require 'ansi-color)
+(defun sandric/display-ansi-colors ()
+  (interactive)
+  (ansi-color-apply-on-region (point-min) (point-max)))
+
+(defun sandric/tmux-show-history ()
+  "Show tmux history with colors."
+
+  (find-file "/home/sandric/.tmux_history")
+  (sandric/display-ansi-colors)
+  (end-of-buffer)
+  (skip-chars-backward "\n"))
+
 (defun sandric/alchemist-struct ()
   "Insert %{} and place cursor after first char."
   (interactive)

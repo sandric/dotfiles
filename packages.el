@@ -103,9 +103,8 @@
   :config (progn
             (setq undo-tree-mode-lighter " Undo-Tree")
             (global-undo-tree-mode))
-  :bind (("C-z" . undo-tree-undo)
-         ("<C-f3> w" . undo-tree-visualize)
-         ("C-y" . undo-tree-redo)))
+  :bind (("C-w" . undo-tree-undo)
+         ("C-p" . undo-tree-redo)))
 
 (use-package multiple-cursors
   :ensure t
@@ -113,11 +112,9 @@
             (setq mc/always-run-for-all 1)
             (setq mc/always-repeat-command t))
   
-  :bind (("<C-f2> s" . mc/mark-next-like-this)
-         ("<C-f2> f" . mc/unmark-next-like-this)
-         ("<C-f2> a" . mc/mark-all-like-this)
-         :map mc/keymap
-         ("ESC ESC ESC" . mc/keyboard-quit)))
+  :bind (("M-s" . mc/mark-next-like-this)
+         ("M-f" . mc/unmark-next-like-this)
+         ("M-a" . mc/mark-all-like-this)))
 
 (use-package smartparens
   :ensure t

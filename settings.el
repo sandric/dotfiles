@@ -1,40 +1,14 @@
 (require 'cl)
 
-(defun sandric/title-major-mode ()
-  "Major mode to be displayed in window title."
-  (if (string= major-mode "term-mode")
-      (if (term-in-char-mode)
-          "term-char-mode"
-        "term-line-mode")
-    (symbol-name major-mode)))
-
-(defun sandric/title-update ()
-  "Update window title."
-  
-  (send-string-to-terminal (concat
-                            "\033]0; emacs "
-                            (sandric/title-major-mode)
-                            " "
-                            (buffer-name)
-                            "\007")))
-
-(add-hook 'buffer-list-update-hook 'sandric/title-update)
-
-(add-hook 'dired-after-readin-hook
-          (lambda ()
-            ;; Set name of dired buffers to absolute directory name.
-            ;; Use `generate-new-buffer-name' for vc-directory
-            ;; which creates duplicate buffers.
-            (rename-buffer (generate-new-buffer-name dired-directory))))
-
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(setq use-dialog-box nil)
 
 (setq load-prefer-newer t)
 
-(menu-bar-mode -1)
-
-(setq x-select-enable-primary t)
-(setq select-enable-primary t)
-(setq mouse-drag-copy-region t)
+(setq x-select-enable-clipboard t)
+(cua-mode t)
 
 (electric-indent-mode +1)
 (show-paren-mode t)
@@ -45,25 +19,7 @@
 (setq-default indent-tabs-mode nil)
 (global-auto-revert-mode t)
 
-(set-language-environment 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-
-(cua-mode t)
-
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-to-list 'default-frame-alist '(cursor-color . "#F74874"))
-
-(setq use-dialog-box nil)
-
-(setq sgml-basic-offset 2)
-(setq js-indent-level 2)
-
-(setq debug-on-error t)
 (setq whitespace-line-column 800)
-(setq ns-function-modifier 'hyper)
 (setq inhibit-startup-message t)
 (setq ring-bell-function 'ignore)
 (setq show-paren-style 'parenthesis)
@@ -84,36 +40,30 @@
 
 (setq-default tab-width 2)
 (set (make-local-variable 'sgml-basic-offset) 2)
+(setq sgml-basic-offset 2)
 (setq css-indent-offset 2)
-
-
-(defun sandric/term-char-mode ()
-  "Switch to char (\"raw\") sub-mode of term mode.
-Each character you type is sent directly to the inferior without
-intervention from Emacs, except for the escape character (usually C-c)."
-  (interactive)
-  (setq term-old-mode-map (current-local-map))
-  (use-local-map term-raw-map)
-  ;; (sandric/term-delete-current-command)
-  ;; (easy-menu-add term-terminal-menu)
-  ;; (easy-mrenu-add term-signals-menu)
-  )
-
-;; (setq split-height-threshold 5000)
-;; (setq split-width-threshold 5000)
+(setq js-indent-level 2)
 
 
 (add-to-list 'display-buffer-alist
              '("." display-buffer-same-window))
 
-(custom-set-variables
- '(display-buffer-base-action 
-   '(display-buffer-reuse-window (reusable-frames . t))))
+;;(custom-set-variables
+;; '(display-buffer-base-action 
+;;   '(display-buffer-reuse-window (reusable-frames . t))))
+
+;; (setq split-height-threshold 5000)
+;; (setq split-width-threshold 5000)
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(cursor-color . "#F74874"))
 
 
-
-
-
+(set-language-environment 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
 
 (setq cyrillic-language "Ukrainian")
 
@@ -190,17 +140,3 @@ intervention from Emacs, except for the escape character (usually C-c)."
  ("Ya" ?Я) ("YA" ?Я)
  ("Ye" ?Є) ("YE" ?Є)
  ("Yi" ?Ї) ("YI" ?Ї))
-
-
-(defadvice cua-copy-region (before copy-xterm-clipboard activate)
-  (if (use-region-p)
-      (write-region (region-beginning) (region-end) "~/host/tmp/clipboard" t)))
-
-(defadvice cua-cut-region (before copy-xterm-clipboard activate)
-  (if (use-region-p)
-      (write-region (region-beginning) (region-end) "~/host/tmp/clipboard" t)))
-
-(define-minor-mode xterm-clipboard-mode
-  (global-set-key (kbd "<xterm-paste>") 'sandric/clipboard-paste))
-
-(add-hook 'prog-mode-hook 'xterm-clipboard-mode)

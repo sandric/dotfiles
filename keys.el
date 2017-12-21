@@ -1,13 +1,31 @@
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
 
-(global-set-key (kbd "<xterm-paste>") 'cua-paste)
+(define-key key-translation-map (kbd "M-q") (kbd "C-g"))
+
+(global-set-key (kbd "C-r") 'cua-copy-region)
+(global-set-key (kbd "C-s") 'cua-cut-region)
+(global-set-key (kbd "C-t") 'cua-paste)
 
 (global-set-key (kbd "<home>") 'sandric/smart-beginning-of-line)
 (global-set-key (kbd "<select>") 'end-of-line)
 
 (global-set-key (kbd "<prior>") 'sandric/scroll-up)
 (global-set-key (kbd "<next>") 'sandric/scroll-down)
+
+(global-set-key (kbd "M-r") 'sandric/eval-last-or-region)
+
+(global-set-key (kbd "C-S-t") 'sandric/select-symbol-under-cursor)
+
+(global-set-key (kbd "M-A") 'kill-this-buffer)
+(global-set-key (kbd "M-R") 'save-buffer)
+(global-set-key (kbd "M-S") 'counsel-find-file)
+
+(global-set-key (kbd "C-h") 'left-word)
+(global-set-key (kbd "C-o") 'right-word)
+
+(global-set-key (kbd "C-S-h") 'sandric/select-word-left)
+(global-set-key (kbd "C-S-o") 'sandric/select-word-right)
 
 
 (define-prefix-command 'sandric-left-ctrl-map)

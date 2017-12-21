@@ -20,12 +20,12 @@
               :config (progn
                         (setq ivy-initial-inputs-alist '()))))
 
-  :bind (("<C-f4> c" . ivy-switch-buffer)
-         ("<C-f4> q" . counsel-M-x)
+  :bind (("M-C" . ivy-switch-buffer)
+         ("M-Q" . counsel-M-x)
          :map ivy-minibuffer-map
-         ("<C-f4> w" . sandric/ivy-replace)
+         ("M-W" . sandric/ivy-replace)
          :map wgrep-mode-map
-         ("<C-f4> r" . wgrep-finish-edit)))
+         ("M-R" . wgrep-finish-edit)))
 
 (use-package swiper
   :ensure t

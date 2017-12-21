@@ -1,3 +1,5 @@
+(setq counsel-rg-base-command "rg -i --hidden --no-messages --no-heading --line-number --color never %s .")
+
 (defun sandric/rg-or-region (beg end &optional directory)
   "RG region or 'empty string' if none highlighted."
   (interactive (if (use-region-p)
@@ -10,8 +12,6 @@
           (setq selection (buffer-substring-no-properties beg end))
           (counsel-rg selection))
       (counsel-rg))))
-
-
 
 (defun sandric/rg-home (beg end)
   "RG in home directory."
