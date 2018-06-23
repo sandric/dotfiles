@@ -112,8 +112,8 @@
             (setq mc/always-run-for-all 1)
             (setq mc/always-repeat-command t))
   
-  :bind (("M-s" . mc/mark-next-like-this)
-         ("M-f" . mc/unmark-next-like-this)
+  :bind (("C-S-s" . mc/mark-next-like-this)
+         ("C-S-f" . mc/unmark-next-like-this)
          ("M-a" . mc/mark-all-like-this)))
 
 (use-package smartparens

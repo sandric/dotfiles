@@ -13,13 +13,12 @@
 (global-set-key (kbd "<prior>") 'sandric/scroll-up)
 (global-set-key (kbd "<next>") 'sandric/scroll-down)
 
-(global-set-key (kbd "M-r") 'sandric/eval-last-or-region)
+(global-set-key (kbd "C-S-C") 'sandric/eval-last-or-region)
 
 (global-set-key (kbd "C-S-t") 'sandric/select-symbol-under-cursor)
 
 (global-set-key (kbd "M-A") 'kill-this-buffer)
-(global-set-key (kbd "M-R") 'save-buffer)
-(global-set-key (kbd "M-S") 'counsel-find-file)
+(global-set-key (kbd "M-S") 'save-buffer)
 
 (global-set-key (kbd "C-h") 'left-word)
 (global-set-key (kbd "C-o") 'right-word)

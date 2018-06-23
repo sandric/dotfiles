@@ -96,6 +96,9 @@
                             "/home/sandric/.rbenv/shims/sass")
                            exec-path))))
 
+(use-package slim-mode
+  :ensure t)
+
 (use-package yaml-mode
   :ensure t)
 
