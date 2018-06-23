@@ -1,0 +1,20 @@
+emacs.font: Monospace-12
+
+URxvt.font:         xft:Monospace-12:pixelsize=12,xft:Symbola
+URxvt.boldFont:     xft:Monospace-12:pixelsize=12,xft:Symbola
+URxvt.italicFont:   xft:Monospace-12:pixelsize=12:slant=italic,xft:Symbola
+
+URxvt*background: white
+URxvt*foreground: black
+
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+
+URxvt.cursorBlink: 1
+URxvt*cursorColor: #F74874
+
+URxvt.scrollBar: false
+
+! yellow
+URxvt*color3  : #FF8787
+URxvt*color11 : #FF8787

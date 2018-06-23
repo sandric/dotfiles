@@ -1,0 +1,15 @@
+#panels-container {
+  display: none;
+}
+
+#header {
+  display: none;
+}
+
+.stacks-on #tabs-container.bottom {
+  padding-bottom: 0px;
+}
+
+#main > .toolbar-addressbar > .toolbar {
+  width: 0px;
+}
