@@ -1,20 +1,7 @@
-(use-package multi-term
-  :ensure t)
-
 (use-package regex-tool
   :ensure t
   :bind (:map regex-tool-mode-map
               ("<C-f4> a" . regex-tool-quit)))
-
-(use-package w3m
-  :ensure t
-  :defer t
-  :bind (:map w3m-mode-map
-              ("<left>" . nil)
-              ("<right>" . nil)
-              ("<up>" . nil)
-              ("<down>" . nil)
-              ("<C-f4> a" . sandric/w3m-force-quit)))
 
 (use-package emamux
   :ensure t
@@ -35,10 +22,6 @@
 (use-package exec-path-from-shell
   :ensure t)
 
-(use-package nlinum
-  :ensure t
-  :config (progn))
-
 (use-package s
   :ensure t
   :defer t)
@@ -58,10 +41,6 @@
             (auto-compile-on-load-mode)
             (auto-compile-on-save-mode)))
 
-(use-package circe
-  :ensure t
-  :defer t)
-
 (use-package rainbow-delimiters
   :ensure t
   :commands (rainbow-delimiters-mode)
@@ -71,12 +50,6 @@
 (use-package rainbow-mode
   :ensure t
   :defer t)
-
-(use-package highlight-symbol
-  :ensure t
-  :config (progn
-            (setq highlight-symbol-idle-delay 0.2)
-            (add-hook 'prog-mode-hook 'highlight-symbol-mode)))
 
 (use-package window-numbering
   :ensure t
@@ -100,11 +73,11 @@
 
 (use-package undo-tree
   :ensure t
-  :config (progn
-            (setq undo-tree-mode-lighter " Undo-Tree")
-            (global-undo-tree-mode))
-  :bind (("C-w" . undo-tree-undo)
-         ("C-p" . undo-tree-redo)))
+  :config (setq
+           (progn undo-tree-mode-lighter " Undo-Tree")
+           (global-undo-tree-mode))
+  :bind (("C-z" . undo-tree-undo)
+         ("C-y" . undo-tree-redo)))
 
 (use-package multiple-cursors
   :ensure t
@@ -112,27 +85,12 @@
             (setq mc/always-run-for-all 1)
             (setq mc/always-repeat-command t))
   
-  :bind (("C-S-s" . mc/mark-next-like-this)
-         ("C-S-f" . mc/unmark-next-like-this)
-         ("M-a" . mc/mark-all-like-this)))
+  :bind (("<C-f10>" . mc/mark-next-like-this)
+         ("<C-f11>" . mc/unmark-next-like-this)))
 
 (use-package smartparens
   :ensure t
   :config (progn (smartparens-global-mode)))
 
-(use-package zygospore
-  :ensure t)
-
 (use-package markdown-mode
   :ensure t)
-
-(use-package sx
-  :ensure t
-  :config (progn
-            (add-hook 'sx-question-list-mode
-                      (lambda () (setq header-line-format nil))))
-  :bind (:map sx-question-mode-map
-              ("<left>" . nil)
-              ("<right>" . nil)
-              ("<up>" . previous-line)
-              ("<down>" . next-line)))

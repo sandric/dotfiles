@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Each
+# key: each
+# --
+Enum.each([$1], fn($2item) -> $0 end)

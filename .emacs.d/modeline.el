@@ -29,7 +29,6 @@
   :group 'modeline-faces)
 
 
-
 (custom-set-faces
  '(mode-line ((t (:background "#F097AD":foreground "black"))))
  '(mode-line-inactive ((t
@@ -37,7 +36,6 @@
                                   :background "grey90"
                                   :foreground "grey20"
                                   :weight light)))))
-
 
 
 (defun sandric/modeline-render (left center right &optional lpad rpad)
@@ -106,9 +104,9 @@ can be used to add a number of spaces to the front and back of the string."
                           'face
                           'mode-line-not-modified)))
     " "
-    (propertize "%l" 'face 'bold)
+    (propertize "%l" 'face 'italic)
     ":"
-    (propertize "%c" 'face 'italic)
+    (propertize "%c" 'face 'normal)
     " "
     (format "%3d%%" (/ (window-end) 0.01 (point-max))))))
 

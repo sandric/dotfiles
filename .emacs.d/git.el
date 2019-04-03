@@ -18,13 +18,13 @@
               :map magit-blame-mode-map
               ("C-g" . magit-blame-quit)))
 
-(use-package magithub
-  :ensure t
-  :config (progn
-            (setq ghub-token (shell-command-to-string "git config --get github.oauth-token"))))
+;(use-package magithub
+;  :ensure t
+;  :config (progn
+;            (setq ghub-token (shell-command-to-string "git config --get github.oauth-token"))))
 
-(use-package github-clone
-  :ensure t)
+;(use-package github-clone
+;  :ensure t)
 
 (use-package git-timemachine
   :ensure t

@@ -1,4 +1,9 @@
 (require 'ansi-color)
+
+(defun sandric/tramp-guest ()
+  (interactive)
+  (find-file "/ssh:guest:"))
+
 (defun sandric/display-ansi-colors ()
   (interactive)
   (ansi-color-apply-on-region (point-min) (point-max)))
@@ -10,20 +15,6 @@
   (sandric/display-ansi-colors)
   (end-of-buffer)
   (skip-chars-backward "\n"))
-
-(defun sandric/alchemist-struct ()
-  "Insert %{} and place cursor after first char."
-  (interactive)
-
-  (insert "%{}")
-  (backward-char 2))
-
-(defun sandric/alchemist-pipe ()
-  "Insert |> and newline."
-  (interactive)
-
-  (call-interactively 'newline)
-  (insert "|> "))
 
 (defun sandric/switch-to-previous-buffer ()
   "Switching to previously used buffer."
@@ -46,8 +37,6 @@
   (let ((buffer (current-buffer)))
     (other-window 1)
     (switch-to-buffer buffer)))
-
-(setq x-select-enable-clipboard nil)
 
 (defun sandric/swiper-or-region (beg end)
   "Swiper region or 'empty string' if none highlighted."

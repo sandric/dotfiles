@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Logger.info
+# key: p
+# --
+Logger.info "$1: #{inspect($1)}"

@@ -63,8 +63,8 @@
               ("M-S" flycheck-list-errors "lint"))
 
             (defhydra hydra-rg (:exit t)
-              "PT"
-              ("M-F" sandric/rg-or-region "current")
+              "RG"
+              ("<f2> f" sandric/rg-or-region "current")
               ("M-A" sandric/rg-home "home")
               ("M-R" sandric/rg-emacs "emacs")
               ("M-S" sandric/rg-projects "projects")
@@ -72,7 +72,7 @@
 
             (defhydra hydra-fzf (:exit t)
               "FZF"
-              ("M-T" sandric/fzf "current")
+              ("<f2> t" sandric/fzf "current")
               ("M-A" sandric/fzf-home "home")
               ("M-R" sandric/fzf-emacs "emacs")
               ("M-S" sandric/fzf-projects "projects")
@@ -80,7 +80,7 @@
 
             (defhydra hydra-dired (:exit t)
               "Dired"
-              ("M-V" dired-jump "current")
+              ("<f2> v" dired-jump "current")
               ("M-A" sandric/dired-jump-home "home")
               ("M-R" sandric/dired-jump-emacs "emacs")
               ("M-S" sandric/dired-jump-projects "projects")
@@ -89,7 +89,7 @@
 
             (defhydra hydra-git (:exit t)
               "Git"
-              ("M-W" magit-status "status")
+              ("<f2> w" magit-status "status")
               ("M-T" git-timemachine "timemachine")
               ("M-F" magit-log-buffer-file "log-file")
               ("M-P" magit-log-all "log")
@@ -97,8 +97,8 @@
 
 
             (global-set-key (kbd "M-N") 'hydra-interact/body)
-            (global-set-key (kbd "M-F") 'hydra-rg/body)
-            (global-set-key (kbd "M-T") 'hydra-fzf/body)
-            (global-set-key (kbd "M-V") 'hydra-dired/body)
-            (global-set-key (kbd "M-W") 'hydra-git/body)
+            (global-set-key (kbd "<f2> f") 'hydra-rg/body)
+            (global-set-key (kbd "<f2> t") 'hydra-fzf/body)
+            (global-set-key (kbd "<f2> v") 'hydra-dired/body)
+            (global-set-key (kbd "<f2> w") 'hydra-git/body)
             ))

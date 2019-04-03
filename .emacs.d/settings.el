@@ -2,14 +2,22 @@
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
-(scroll-bar-mode -1)
-(setq use-dialog-box nil)
 
+(setq auto-window-vscroll nil)
 (setq load-prefer-newer t)
+(setq shell-file-name "/bin/bash")
+(setq explicit-shell-file-name "/bin/bash")
 
-(setq x-select-enable-clipboard t)
-(cua-mode t)
+(defun wsl-copy (start end)
+  (interactive "r")
+  (shell-command-on-region start end "clip.exe"))
 
+(defun wsl-cut (start end)
+  (interactive "r")
+  (shell-command-on-region start end "clip.exe")
+  (delete-region start end))
+
+(show-paren-mode t)
 (electric-indent-mode +1)
 (show-paren-mode t)
 (blink-cursor-mode t)
@@ -47,13 +55,6 @@
 
 (add-to-list 'display-buffer-alist
              '("." display-buffer-same-window))
-
-;;(custom-set-variables
-;; '(display-buffer-base-action 
-;;   '(display-buffer-reuse-window (reusable-frames . t))))
-
-;; (setq split-height-threshold 5000)
-;; (setq split-width-threshold 5000)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(cursor-color . "#F74874"))
@@ -140,3 +141,5 @@
  ("Ya" ?Я) ("YA" ?Я)
  ("Ye" ?Є) ("YE" ?Є)
  ("Yi" ?Ї) ("YI" ?Ї))
+
+(toggle-scroll-bar -1)

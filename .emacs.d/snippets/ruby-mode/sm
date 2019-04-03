@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: static method
+# key: sm
+# --
+static $1 ($2) {
+  $0
+}
